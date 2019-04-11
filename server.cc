@@ -233,7 +233,7 @@ void tCPReceive() {
 					printf("myrank = %i, recive one_b_message from %i, uuid = %ld\n",world_rank,status.MPI_SOURCE, one_b_message.uuid);
 
 					//use oenBMessageProcess to process one_b_message
-					boost::asio::post(pool, boost::bind(oneBMessageProcess<T>, &one_b_message, status.MPI_SOURCE));
+					boost::asio::post(pool, boost::bind(oneBMessageProcess<T>, one_b_message, status.MPI_SOURCE));
 
 					break;
 
@@ -251,7 +251,7 @@ void tCPReceive() {
 					/* communicator = */ MPI_COMM_WORLD, 
 					/* status       = */ MPI_STATUS_IGNORE);
 
-					boost::asio::post(pool, boost::bind(phase2b<T>, &two_a_message, status.MPI_SOURCE));
+					boost::asio::post(pool, boost::bind(phase2b<T>, two_a_message, status.MPI_SOURCE));
 
 					break;
 
@@ -277,9 +277,9 @@ void tCPReceive() {
 
 	}
 	template <typename T>
-	void oneBMessageProcess(OneBMessage<T>* one_b_message, int source) {
+	void oneBMessageProcess(OneBMessage<T> one_b_message, int source) {
 
-		long uuid = one_b_message->uuid;
+		long uuid = one_b_message.uuid;
 				
 		long local_rank = uuid << 32;
 
@@ -292,15 +292,15 @@ void tCPReceive() {
 
 				TCP_message_std.operation_type = GET;
 
-				((TCPResponseInfo<T>*)TCP_message_std.message_text)->status = one_b_message->status[0];
+				((TCPResponseInfo<T>*)TCP_message_std.message_text)->status = one_b_message.status[0];
 
-				if(!one_b_message->status[0]) {
-					((TCPResponseInfo<T>*)(TCP_message_std.message_text))->hash_value = one_b_message->hash_value;
+				if(!one_b_message.status[0]) {
+					((TCPResponseInfo<T>*)(TCP_message_std.message_text))->hash_value = one_b_message.hash_value;
 				}
 
 				int sock = uuid >> 32;
 
-				//printf("send get result to %i\n", sock);
+				printf("send get result to %i\n", sock);
 
 				send(sock, &TCP_message_std, sizeof(TCPMessageSTD), 0);
 
@@ -314,7 +314,7 @@ void tCPReceive() {
 
 				record_table[uuid].ack_counter++;
 
-				if(one_b_message->status[0] == 0) {
+				if(one_b_message.status[0] == 0) {
 
 				record_table[uuid].request[0].p1_counter++;
 				}
@@ -355,7 +355,7 @@ void tCPReceive() {
 
 					for(int i = 0; i < 3; i++) {
 
-						if(one_b_message->status[i] == 0) {
+						if(one_b_message.status[i] == 0) {
 
 							record_table[uuid].request[i].p1_counter++;
 
@@ -392,9 +392,9 @@ void tCPReceive() {
 	}
 
 template <typename T>
-void twoBMessageProcess(TwoBMessage* two_b_message){
+void twoBMessageProcess(TwoBMessage two_b_message){
 
-	long uuid = two_b_message->uuid;
+	long uuid = two_b_message.uuid;
 				
 	long local_rank = uuid << 32;
 
@@ -524,8 +524,6 @@ void twoBMessageProcess(TwoBMessage* two_b_message){
 	void phase1b(OneAMessage one_a_message, int source){
 		long uuid = one_a_message.uuid;
 
-		printf("prepare one_b_message from %i, to %i, uuid = %ld\n", world_rank, source, uuid);
-
 		OneBMessage<T> one_b_message;
 
 		one_b_message.uuid = one_a_message.uuid;
@@ -597,7 +595,7 @@ void twoBMessageProcess(TwoBMessage* two_b_message){
 			}
 		}
 	
-		
+		printf("send one_b_message from %i, to %i, uuid = %ld\n", world_rank, source, one_b_message.uuid);
 
 		MPI_Send(
 		/* data         = */ &one_b_message, 
@@ -673,11 +671,11 @@ void twoBMessageProcess(TwoBMessage* two_b_message){
 
 	}
     template <typename T>
-	void phase2b(TwoAMessage<T>* two_a_message, int source) {
+	void phase2b(TwoAMessage<T> two_a_message, int source) {
 
 		TwoBMessage two_b_message;
 
-		two_b_message.uuid = two_a_message->uuid;
+		two_b_message.uuid = two_a_message.uuid;
 
 		two_b_message.status = 0;
 
@@ -685,7 +683,7 @@ void twoBMessageProcess(TwoBMessage* two_b_message){
 
 		string temp[3];
 
-		switch (two_a_message->decision) {
+		switch (two_a_message.decision) {
 
 			case ABORT:
 
@@ -693,20 +691,20 @@ void twoBMessageProcess(TwoBMessage* two_b_message){
 			
 			case COMMIT:
 
-				if(two_a_message->operation_type == PUT) {
+				if(two_a_message.operation_type == PUT) {
 
-					temp[0] = two_a_message->hash_pair[0].hash_key;
+					temp[0] = two_a_message.hash_pair[0].hash_key;
 
-					put(temp[0], &two_a_message->hash_pair[0].hash_value);
+					put(temp[0], &two_a_message.hash_pair[0].hash_value);
 				} else {
 
 					for(int i = 0; i < 3; i++) {
 
-						temp[i] = two_a_message->hash_pair[i].hash_key;
+						temp[i] = two_a_message.hash_pair[i].hash_key;
 						
-						if(findNode1(two_a_message->hash_pair[i].hash_key) == world_rank || findNode2(two_a_message->hash_pair[i].hash_key) == world_rank) {
+						if(findNode1(two_a_message.hash_pair[i].hash_key) == world_rank || findNode2(two_a_message.hash_pair[i].hash_key) == world_rank) {
 
-							put(temp[i], &two_a_message->hash_pair[i].hash_value);
+							put(temp[i], &two_a_message.hash_pair[i].hash_value);
 						}
 				
 					}

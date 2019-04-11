@@ -573,13 +573,15 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 					one_b_message.status[0] = 0;
 
-					printf("lock %i on %i success by %ld\n", (int)hasher(temp[0])%LOCK_NUM, world_rank, uuid);
+					printf("lock %i on %i success by %ld\n", hasher(temp[0])%LOCK_NUM, world_rank, uuid);
+
+					lock_table[uuid].insert((int)(hasher(temp[0])%LOCK_NUM));
 
 				} else {
 
 					one_b_message.status[0] = 1;
 
-					printf("lock %i on %i fail by %ld\n", (int)hasher(temp[0])%LOCK_NUM, world_rank, uuid);
+					printf("lock %i on %i fail by %ld\n", hasher(temp[0])%LOCK_NUM, world_rank, uuid);
 
 				}
 
@@ -589,9 +591,8 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 				one_b_message.status[0] = 1;
 
-				printf("lock %i on %i fail by %ld\n", (int)hasher(temp[0])%LOCK_NUM, world_rank, uuid);
-
-				lock_table[uuid].insert((int)(hasher(temp[0])%LOCK_NUM));
+				printf("lock %i on %i fail by %ld\n", hasher(temp[0])%LOCK_NUM, world_rank, uuid);
+				
 				}
 			
 
@@ -755,7 +756,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 			printf("lock %i for %ld on %i unlocked\n", *it, uuid, world_rank);
 
-			locked[*it] = 0;
+			locked[*it] = false;
 
 		}
 

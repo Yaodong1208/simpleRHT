@@ -296,6 +296,8 @@ void tCPReceive() {
 
 		local_rank = local_rank >> 32;
 
+		local_lock[local_rank].lock();
+
 		switch (record_table[uuid].operation_type) {
 
 			case GET: {
@@ -322,7 +324,7 @@ void tCPReceive() {
 
 
 			case PUT: {
-				local_lock[local_rank].lock();
+				
 
 				record_table[uuid].ack_counter++;
 
@@ -355,7 +357,7 @@ void tCPReceive() {
 	
 				}
 				
-				local_lock[local_rank].unlock();
+				
 				
 				break;
 			}
@@ -363,7 +365,7 @@ void tCPReceive() {
 
 
 			case MULTIPUT: {
-					local_lock[local_rank].lock();
+					
 
 					record_table[uuid].ack_counter++;
 
@@ -398,12 +400,13 @@ void tCPReceive() {
 
 						phase2a<T>(uuid, COMMIT);
 
-						local_lock[local_rank].unlock();
+						
 							
 					}
 			}
 
 		}
+		local_lock[local_rank].unlock();
 
 	}
 
@@ -422,7 +425,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 	if(record_table[uuid].ack_counter == record_table[uuid].send_counter) {
 
-		local_lock[local_rank].unlock();
+		
 
 		if(record_table[uuid].decision == ABORT) {
 
@@ -458,12 +461,10 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 			send(sock, &tcp_message_std, sizeof(TCPMessageSTD), 0);
 
-			local_lock[local_rank].unlock();
-
 		}
-	} else {
-		local_lock[local_rank].unlock();
-	}
+	} 
+		
+	local_lock[local_rank].unlock();
 }
 
 ////////////////////////////////////////

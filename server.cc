@@ -595,7 +595,8 @@ void twoBMessageProcess(TwoBMessage* two_b_message){
 			}
 		}
 	
-
+		printf("send one_b_message from %i, to %i, uuid = %ld\n", world_rank, source, one_b_message.uuid);
+		
 		MPI_Send(
 		/* data         = */ &one_b_message, 
 		/* count        = */ sizeof(OneBMessage<T>), 
@@ -605,7 +606,7 @@ void twoBMessageProcess(TwoBMessage* two_b_message){
 		/* communicator = */ MPI_COMM_WORLD
 		);
 
-		printf("send one_b_message from %i, to %i, uuid = %ld\n", world_rank, source, one_b_message.uuid);
+		
 
 	}
 

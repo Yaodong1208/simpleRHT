@@ -431,7 +431,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 			}
 
 			//restart
-			phase1a<T>(uuid);
+			//phase1a<T>(uuid);
 			
 
 		} else {
@@ -728,6 +728,8 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 		}
 
 		for(auto it = lock_table[uuid].begin(); it != lock_table[uuid].end(); it++) {
+
+			printf("lock %i for %ld on %i unlocked\n", *it, uuid, world_rank);
 
 			latch[*it].unlock();
 

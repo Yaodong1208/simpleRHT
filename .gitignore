@@ -1,1 +1,5 @@
 .vscode
+server.o
+client.o
+server
+client

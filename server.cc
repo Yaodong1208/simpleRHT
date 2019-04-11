@@ -712,7 +712,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 			}
 
 			case GET: {
-
+				return;
 			}
 
 		}
@@ -777,7 +777,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 		for(auto it = lock_table[uuid].begin(); it != lock_table[uuid].end(); it++) {
 
-			printf("lock %i for %ld on %i unlocked\n", *it, uuid, world_rank);
+			printf("unlock %i for %ld on %i\n", *it, uuid, world_rank);
 
 			locked[*it] = false;
 

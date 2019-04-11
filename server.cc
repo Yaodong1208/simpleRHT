@@ -327,7 +327,7 @@ void tCPReceive() {
 
 						record_table[uuid].decision = COMMIT;
 
-						local_lock[local_rank].unlock();
+						
 
 						phase2a<T>(uuid, COMMIT);
 
@@ -335,14 +335,16 @@ void tCPReceive() {
 
 						record_table[uuid].decision = ABORT;
 
-						local_lock[local_rank].unlock();
+						
 
 						phase2a<T>(uuid, ABORT);
 						
 					}
 	
 				}
-
+				
+				local_lock[local_rank].unlock();
+				
 				break;
 			}
 
@@ -383,6 +385,8 @@ void tCPReceive() {
 						record_table[uuid].decision = COMMIT;
 
 						phase2a<T>(uuid, COMMIT);
+
+						local_lock[local_rank].unlock();
 							
 					}
 			}

@@ -589,7 +589,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 				}
 
 				latch[(hasher(temp[0])%LOCK_NUM)].unlock();
-				printf("unlock trylock %i on %i by %ld\n", (int)hasher(temp[0])%LOCK_NUM, world_rank, uuid);
+				printf("unlock trylock %i on %i by %ld\n", hasher(temp[0])%LOCK_NUM, world_rank, uuid);
 
 			} else {
 

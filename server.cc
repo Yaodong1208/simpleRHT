@@ -569,6 +569,8 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 				one_b_message.status[0] = 0;
 
+				printf("lock %i on %i success by %ld\n", hasher(temp[0])%LOCK_NUM, world_rank, uuid);
+
 				lock_table[uuid].insert(hasher(temp[0])%LOCK_NUM);
 				}
 			
@@ -673,7 +675,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 		for(auto it = record_table[uuid].part.begin(); it != record_table[uuid].part.end(); it++) {
 
-		printf("decision is %i by %ld, send to %i\n", two_a_message.decision, two_a_message.uuid, *it);
+		//printf("decision is %i by %ld, send to %i\n", two_a_message.decision, two_a_message.uuid, *it);
 
 			MPI_Send(
 			/* data         = */ &two_a_message, 

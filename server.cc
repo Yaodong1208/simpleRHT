@@ -251,7 +251,7 @@ void tCPReceive() {
 					/* communicator = */ MPI_COMM_WORLD, 
 					/* status       = */ MPI_STATUS_IGNORE);
 
-					boost::asio::post(pool, boost::bind(phase2b<T>, &two_a_message, status.MPI_SOURCE));
+					boost::asio::post(pool, boost::bind(phase2b<T>, two_a_message, status.MPI_SOURCE));
 
 					break;
 
@@ -269,7 +269,7 @@ void tCPReceive() {
 					/* communicator = */ MPI_COMM_WORLD, 
 					/* status       = */ MPI_STATUS_IGNORE);
 
-					boost::asio::post(pool, boost::bind(twoBMessageProcess<T>, &two_b_message));
+					boost::asio::post(pool, boost::bind(twoBMessageProcess<T>, two_b_message));
 
 			}
 
@@ -392,9 +392,9 @@ void tCPReceive() {
 	}
 
 template <typename T>
-void twoBMessageProcess(TwoBMessage* two_b_message){
+void twoBMessageProcess(TwoBMessage two_b_message){
 
-	long uuid = two_b_message->uuid;
+	long uuid = two_b_message.uuid;
 				
 	long local_rank = uuid << 32;
 
@@ -673,11 +673,11 @@ void twoBMessageProcess(TwoBMessage* two_b_message){
 
 	}
     template <typename T>
-	void phase2b(TwoAMessage<T>* two_a_message, int source) {
+	void phase2b(TwoAMessage<T> two_a_message, int source) {
 
 		TwoBMessage two_b_message;
 
-		two_b_message.uuid = two_a_message->uuid;
+		two_b_message.uuid = two_a_message.uuid;
 
 		two_b_message.status = 0;
 
@@ -685,7 +685,7 @@ void twoBMessageProcess(TwoBMessage* two_b_message){
 
 		string temp[3];
 
-		switch (two_a_message->decision) {
+		switch (two_a_message.decision) {
 
 			case ABORT:
 
@@ -693,20 +693,20 @@ void twoBMessageProcess(TwoBMessage* two_b_message){
 			
 			case COMMIT:
 
-				if(two_a_message->operation_type == PUT) {
+				if(two_a_message.operation_type == PUT) {
 
-					temp[0] = two_a_message->hash_pair[0].hash_key;
+					temp[0] = two_a_message.hash_pair[0].hash_key;
 
-					put(temp[0], &two_a_message->hash_pair[0].hash_value);
+					put(temp[0], &two_a_message.hash_pair[0].hash_value);
 				} else {
 
 					for(int i = 0; i < 3; i++) {
 
-						temp[i] = two_a_message->hash_pair[i].hash_key;
+						temp[i] = two_a_message.hash_pair[i].hash_key;
 						
-						if(findNode1(two_a_message->hash_pair[i].hash_key) == world_rank || findNode2(two_a_message->hash_pair[i].hash_key) == world_rank) {
+						if(findNode1(two_a_message.hash_pair[i].hash_key) == world_rank || findNode2(two_a_message.hash_pair[i].hash_key) == world_rank) {
 
-							put(temp[i], &two_a_message->hash_pair[i].hash_value);
+							put(temp[i], &two_a_message.hash_pair[i].hash_value);
 						}
 				
 					}

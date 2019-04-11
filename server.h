@@ -68,7 +68,7 @@ template <typename T>
 extern void phase2a(long uuid, Decision decision);
 
 template <typename T>
-extern void phase2b(TwoAMessage<T>* two_a_message, int source);
+extern void phase2b(TwoAMessage<T> two_a_message, int source);
  
 template <typename T>
 extern void tCPReceive();
@@ -86,7 +86,7 @@ template <typename T>
 extern Decision abortHelper(long uuid, int source, int status, int p1, HashKey hash_key, T hash_value);
 
 template <typename T>
-extern void twoBMessageProcess(TwoBMessage* two_b_message);
+extern void twoBMessageProcess(TwoBMessage two_b_message);
 
 extern int findNode1(HashKey hash_key);
 

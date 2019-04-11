@@ -212,7 +212,7 @@ void tCPReceive() {
 
 					printf("myrank = %i, recive one_a_message from %ld\n",world_rank, one_a_message.uuid);
 					
-					boost::asio::post(pool, boost::bind(phase1b<T>, &one_a_message, status.MPI_SOURCE));
+					boost::asio::post(pool, boost::bind(phase1b<T>, one_a_message, status.MPI_SOURCE));
 
 					break;
 
@@ -521,10 +521,10 @@ void twoBMessageProcess(TwoBMessage* two_b_message){
 	}
 
     template<typename T>
-	void phase1b(OneAMessage* one_a_message, int source){
+	void phase1b(OneAMessage one_a_message, int source){
 		long uuid = one_a_message->uuid;
 
-		printf("send one_b_message from %i, to %i, uuid = %ld\n", world_rank, source, uuid);
+		printf("prepare one_b_message from %i, to %i, uuid = %ld\n", world_rank, source, uuid);
 
 		OneBMessage<T> one_b_message;
 

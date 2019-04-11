@@ -62,7 +62,7 @@ template <typename T>
 extern void phase1a(long uuid);
 
 template<typename T>
-extern void phase1b(OneAMessage* one_a_message, int source);
+extern void phase1b(OneAMessage one_a_message, int source);
 
 template <typename T>
 extern void phase2a(long uuid, Decision decision);

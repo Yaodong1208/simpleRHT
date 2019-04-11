@@ -41,10 +41,13 @@ using namespace std;
 
 		cout<<"my world_rank is "<<world_rank<<"\n";
 
+		srand(time(0));
+
 		thread t1(tCPReceive<int>);
 		thread t2(mPIReceive<int>);
 		t1.join();
 		t2.join();
+
 	}
 	
 	////////////////////////////////////////
@@ -418,7 +421,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 		if(record_table[uuid].decision == ABORT) {
 
-			printf("ABORT success by %ld, restart\n", uuid);
+			//printf("ABORT success by %ld, restart\n", uuid);
 
 			//reset
 			record_table[uuid].decision = COMMIT;
@@ -430,13 +433,14 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 				record_table[uuid].request[i].p1_counter = 0;
 			}
 
-			//restart
-			//phase1a<T>(uuid);
+			//restart after a while
+			usleep(rand()%1000);
+			phase1a<T>(uuid);
 			
 
 		} else {
 
-			printf("COMMIT success by %ld\n", uuid);
+			//printf("COMMIT success by %ld\n", uuid);
 
 			//send tcp response
 			TCPMessageSTD tcp_message_std;

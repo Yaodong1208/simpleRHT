@@ -24,6 +24,8 @@ using namespace std;
 
 	mutex tcp_lock;
 
+	long locked_id[LOCK_NUM] = {0};
+
 	map<long,Record<int>> record_table;
 
 	hash<string> hasher;
@@ -583,11 +585,20 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 					lock_table[uuid].insert((hasher(temp[0])%LOCK_NUM));
 
+					locked_id[hasher(temp[0])%LOCK_NUM] = uuid;
+
 				} else {
 
-					one_b_message.status[0] = 1;
+					if(locked_id[hasher(temp[0])%LOCK_NUM] == uuid) {
 
-					printf("lock %i on %i fail by %ld because of locked\n", (hasher(temp[0])%LOCK_NUM), world_rank, uuid);
+						one_b_message.status[0] = 0;
+
+						printf("lock %i on %i success by %ld\n", (hasher(temp[0])%LOCK_NUM), world_rank, uuid);
+
+					} else {one_b_message.status[0] = 1;
+
+						printf("lock %i on %i fail by %ld because of locked\n", (hasher(temp[0])%LOCK_NUM), world_rank, uuid);
+					}
 
 				}
 
@@ -783,6 +794,8 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 			printf("unlock %i for %ld on %i\n", *it, uuid, world_rank);
 
 			locked[*it] = false;
+
+			locked_id[*it] = 0;
 
 		}
 

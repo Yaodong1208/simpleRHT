@@ -150,6 +150,8 @@ void tCPReceive() {
 			//parse TCP_request to record_table
 
 			record_table[uuid].operation_type = (OperationType)TCP_request->operation_type;
+
+			memset(&(record_table[uuid].request),0,sizeof(HashPair<T>) * 3);
 			
 			memcpy(&(record_table[uuid].request), &(((TCPRequestInfo<T>*)(TCP_request->message_text))->hash_pair), sizeof(HashPair<T>) * 3);
 			
@@ -158,6 +160,8 @@ void tCPReceive() {
 			record_table[uuid].ack_counter = 0;
 
 			record_table[uuid].send_counter = 0;
+
+			record_table[uuid].part.clear();
 
 			if(record_table[uuid].operation_type == MULTIPUT) {
 

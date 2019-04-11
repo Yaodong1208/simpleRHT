@@ -436,7 +436,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 			}
 
 			//restart after a while
-			usleep(rand()%1000);
+			//usleep(rand()%1000);
 			phase1a<T>(uuid);
 			
 

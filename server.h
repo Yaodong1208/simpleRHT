@@ -80,7 +80,7 @@ template <typename T>
 extern void mPIReceive();
 
 template <typename T>
-extern void oneBMessageProcess(OneBMessage<T>* one_b_message, int source);
+extern void oneBMessageProcess(OneBMessage<T> one_b_message, int source);
 
 template <typename T>
 extern Decision abortHelper(long uuid, int source, int status, int p1, HashKey hash_key, T hash_value);

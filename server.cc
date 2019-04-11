@@ -233,7 +233,7 @@ void tCPReceive() {
 					printf("myrank = %i, recive one_b_message from %i, uuid = %ld\n",world_rank,status.MPI_SOURCE, one_b_message.uuid);
 
 					//use oenBMessageProcess to process one_b_message
-					boost::asio::post(pool, boost::bind(oneBMessageProcess<T>, &one_b_message, status.MPI_SOURCE));
+					boost::asio::post(pool, boost::bind(oneBMessageProcess<T>, one_b_message, status.MPI_SOURCE));
 
 					break;
 
@@ -277,9 +277,9 @@ void tCPReceive() {
 
 	}
 	template <typename T>
-	void oneBMessageProcess(OneBMessage<T>* one_b_message, int source) {
+	void oneBMessageProcess(OneBMessage<T> one_b_message, int source) {
 
-		long uuid = one_b_message->uuid;
+		long uuid = one_b_message.uuid;
 				
 		long local_rank = uuid << 32;
 
@@ -292,10 +292,10 @@ void tCPReceive() {
 
 				TCP_message_std.operation_type = GET;
 
-				((TCPResponseInfo<T>*)TCP_message_std.message_text)->status = one_b_message->status[0];
+				((TCPResponseInfo<T>*)TCP_message_std.message_text)->status = one_b_message.status[0];
 
-				if(!one_b_message->status[0]) {
-					((TCPResponseInfo<T>*)(TCP_message_std.message_text))->hash_value = one_b_message->hash_value;
+				if(!one_b_message.status[0]) {
+					((TCPResponseInfo<T>*)(TCP_message_std.message_text))->hash_value = one_b_message.hash_value;
 				}
 
 				int sock = uuid >> 32;
@@ -314,7 +314,7 @@ void tCPReceive() {
 
 				record_table[uuid].ack_counter++;
 
-				if(one_b_message->status[0] == 0) {
+				if(one_b_message.status[0] == 0) {
 
 				record_table[uuid].request[0].p1_counter++;
 				}
@@ -355,7 +355,7 @@ void tCPReceive() {
 
 					for(int i = 0; i < 3; i++) {
 
-						if(one_b_message->status[i] == 0) {
+						if(one_b_message.status[i] == 0) {
 
 							record_table[uuid].request[i].p1_counter++;
 

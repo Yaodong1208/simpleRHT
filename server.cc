@@ -210,9 +210,9 @@ void tCPReceive() {
 					/* communicator = */ MPI_COMM_WORLD, 
 					/* status       = */ MPI_STATUS_IGNORE);
 
-					printf("myrank = %i, recive one_a_message from %ld\n",world_rank, one_a_message.uuid);
+					//printf("myrank = %i, recive one_a_message from %ld\n",world_rank, one_a_message.uuid);
 					
-					//boost::asio::post(pool, boost::bind(phase1b<T>, &one_a_message, status.MPI_SOURCE));
+					boost::asio::post(pool, boost::bind(phase1b<T>, &one_a_message, status.MPI_SOURCE));
 
 					break;
 
@@ -230,8 +230,10 @@ void tCPReceive() {
 					/* communicator = */ MPI_COMM_WORLD, 
 					/* status       = */ MPI_STATUS_IGNORE);
 
+					printf("myrank = %i, recive one_b_message from %i, uuid = %ld\n",world_rank,status.MPI_SOURCE, one_b_message.uuid);
+
 					//use oenBMessageProcess to process one_b_message
-					boost::asio::post(pool, boost::bind(oneBMessageProcess<T>, &one_b_message, status.MPI_SOURCE));
+					//boost::asio::post(pool, boost::bind(oneBMessageProcess<T>, &one_b_message, status.MPI_SOURCE));
 
 					break;
 
@@ -510,7 +512,7 @@ void twoBMessageProcess(TwoBMessage* two_b_message){
 			/* tag          = */ ONEAMESSAGE, 
 			/* communicator = */ MPI_COMM_WORLD
 			);
-			printf("send one_a_message from %ld, send_node = %i\n", one_a_message.uuid, *node);
+			//printf("send one_a_message from %ld, send_node = %i\n", one_a_message.uuid, *node);
 		}
 		
 	}
@@ -599,6 +601,8 @@ void twoBMessageProcess(TwoBMessage* two_b_message){
 		/* tag          = */ ONEBMESSAGE, 
 		/* communicator = */ MPI_COMM_WORLD
 		);
+
+		printf("send one_b_message from %i, to %i, uuid = %ld", world_rank, source, one_b_message.uuid);
 
 	}
 

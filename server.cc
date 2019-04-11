@@ -28,7 +28,7 @@ using namespace std;
 
 	hash<string> hasher;
 
-	bool locked[LOCK_NUM] = 0;
+	bool locked[LOCK_NUM] = {0};
 
 	boost::asio::thread_pool pool(10);
 

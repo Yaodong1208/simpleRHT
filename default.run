@@ -1,0 +1,9 @@
+description: run on amazon ec2 cluster
+
+Environment: ubuntu 18.4, MPICH, nfs-server/nfs-client, opens
+
+Instruction:
+	run server on master node: mpiexec -n 2 -f machinefile ./server
+	run client on every node: ./client ] [opearation-number] 
+	
+

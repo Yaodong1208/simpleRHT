@@ -236,7 +236,7 @@ void generateKey(HashKey key){
 
 		++message_received;
 
-		printf("number of message_received is %i", message_received);
+		printf("number of message_received is %i\n", message_received);
 
 		//calling responseProcess to process the response
 		int status = responseProcess<T>(&response);

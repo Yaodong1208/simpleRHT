@@ -563,6 +563,8 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 				one_b_message.status[0] = 1;
 
+				printf("lock %i on %i fail by %ld\n", hasher(temp[0])%LOCK_NUM, world_rank, uuid);
+
 			} else {
 
 				one_b_message.status[0] = 0;

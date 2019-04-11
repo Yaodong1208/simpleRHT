@@ -300,6 +300,8 @@ void tCPReceive() {
 
 				int sock = uuid >> 32;
 
+				printf("send get result to %i", sock);
+
 				send(sock, &TCP_message_std, sizeof(TCPMessageSTD), 0);
 
 				break;

@@ -174,9 +174,9 @@ void tCPReceive() {
 
 				//printf("store hash_key = %s, hash_value = %i\n", record_table[uuid].request[2].hash_key, record_table[uuid].request[2].hash_value);
 			}
-			local_lock[local_rank].lock();
+			
 			phase1a<T>(uuid);
-			local_lock[local_rank].unlock();
+			
 
 		}
 

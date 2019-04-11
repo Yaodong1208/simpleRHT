@@ -161,7 +161,7 @@ void tCPReceive() {
 
 			if(record_table[uuid].operation_type == MULTIPUT) {
 
-				printf("store hash_key = %s, hash_value = %i\n", record_table[uuid].request[2].hash_key, record_table[uuid].request[2].hash_value);
+				//printf("store hash_key = %s, hash_value = %i\n", record_table[uuid].request[2].hash_key, record_table[uuid].request[2].hash_value);
 			}
 
 			phase1a<T>(uuid);
@@ -210,7 +210,7 @@ void tCPReceive() {
 					/* communicator = */ MPI_COMM_WORLD, 
 					/* status       = */ MPI_STATUS_IGNORE);
 
-					printf("myrank = %i, recive one_a_message from %ld\n",world_rank, one_a_message.uuid);
+					//printf("myrank = %i, recive one_a_message from %ld\n",world_rank, one_a_message.uuid);
 					
 					boost::asio::post(pool, boost::bind(phase1b<T>, one_a_message, status.MPI_SOURCE));
 
@@ -230,7 +230,7 @@ void tCPReceive() {
 					/* communicator = */ MPI_COMM_WORLD, 
 					/* status       = */ MPI_STATUS_IGNORE);
 
-					printf("myrank = %i, recive one_b_message from %i, uuid = %ld\n",world_rank,status.MPI_SOURCE, one_b_message.uuid);
+					//printf("myrank = %i, recive one_b_message from %i, uuid = %ld\n",world_rank,status.MPI_SOURCE, one_b_message.uuid);
 
 					//use oenBMessageProcess to process one_b_message
 					boost::asio::post(pool, boost::bind(oneBMessageProcess<T>, one_b_message, status.MPI_SOURCE));
@@ -300,7 +300,7 @@ void tCPReceive() {
 
 				int sock = uuid >> 32;
 
-				printf("send get result to %i\n", sock);
+				//printf("send get result to %i\n", sock);
 
 				send(sock, &TCP_message_std, sizeof(TCPMessageSTD), 0);
 
@@ -523,7 +523,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 			/* communicator = */ MPI_COMM_WORLD
 			);
 			int sock = one_a_message.uuid>>32;
-			printf("send one_a_message from %ld,  sock = %i, send_node = %i\n", one_a_message.uuid,sock, *node);
+			//printf("send one_a_message from %ld,  sock = %i, send_node = %i\n", one_a_message.uuid,sock, *node);
 		}
 		
 	}
@@ -532,7 +532,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 	void phase1b(OneAMessage one_a_message, int source){
 		long uuid = one_a_message.uuid;
 
-		printf("send one_b_message from %i, to %i, uuid = %ld\n", world_rank, source, one_a_message.uuid);
+		//printf("send one_b_message from %i, to %i, uuid = %ld\n", world_rank, source, one_a_message.uuid);
 
 		OneBMessage<T> one_b_message;
 
@@ -721,11 +721,15 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 				
 					}
 				}
-
-				for(auto it = lock_table[uuid].begin(); it != lock_table[uuid].end(); it++) {
-					latch[*it].unlock();
-				}
 		}
+
+		for(auto it = lock_table[uuid].begin(); it != lock_table[uuid].end(); it++) {
+
+			latch[*it].unlock();
+
+		}
+
+		lock_table[uuid].clear();
 
 		MPI_Send(
 		/* data         = */ &two_b_message, 

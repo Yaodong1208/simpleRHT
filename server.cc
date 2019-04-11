@@ -565,15 +565,15 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 			temp[0] = one_a_message.hash_key[0];
 
-			if(latch[(int)(hasher(temp[0])%LOCK_NUM)].try_lock()) {
+			if(latch[hasher(temp[0])%LOCK_NUM].try_lock()) {
 
-				if(!locked[(int)(hasher(temp[0])%LOCK_NUM)]) {
+				if(!locked[hasher(temp[0])%LOCK_NUM]) {
 
-					locked[(int)(hasher(temp[0])%LOCK_NUM)] = true;
+					locked[hasher(temp[0])%LOCK_NUM] = true;
 
 					one_b_message.status[0] = 0;
 
-					printf("lock %i on %i success by %ld\n", hasher(temp[0])%LOCK_NUM, world_rank, uuid);
+					printf("lock %i on %i success by %ld\n", (int)hasher(temp[0])%LOCK_NUM, world_rank, uuid);
 
 					lock_table[uuid].insert((int)(hasher(temp[0])%LOCK_NUM));
 
@@ -581,17 +581,18 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 					one_b_message.status[0] = 1;
 
-					printf("lock %i on %i fail by %ld\n", hasher(temp[0])%LOCK_NUM, world_rank, uuid);
+					printf("lock %i on %i fail by %ld\n", (int)hasher(temp[0])%LOCK_NUM, world_rank, uuid);
 
 				}
 
-				latch[(int)(hasher(temp[0])%LOCK_NUM)].unlock();
+				latch[(hasher(temp[0])%LOCK_NUM)].unlock();
+				printf("unlock trylock %i on %i by %ld\n", (int)hasher(temp[0])%LOCK_NUM, world_rank, uuid);
 
 			} else {
 
 				one_b_message.status[0] = 1;
 
-				printf("lock %i on %i fail by %ld becase of try_lock\n", hasher(temp[0])%LOCK_NUM, world_rank, uuid);
+				printf("lock %i on %i fail by %ld because of try_lock\n", hasher(temp[0])%LOCK_NUM, world_rank, uuid);
 				
 				}
 			

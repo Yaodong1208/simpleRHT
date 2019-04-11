@@ -13,19 +13,19 @@ float get_percent = 0;
 int thread_number = 8;
 
 
-atomic_int message_received = 0;
+int message_received = 0;
 
-atomic_int put_success;
+int put_success;
 
-atomic_int get_success;
+int get_success;
 
-atomic_int multiput_success;
+int multiput_success;
 
-atomic_int put_fail;
+int put_fail;
 
-atomic_int get_fail;
+int get_fail;
 
-atomic_int multiput_fail;
+int multiput_fail;
 
 thread worker[8];
 

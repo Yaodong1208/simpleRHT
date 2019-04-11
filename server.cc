@@ -309,7 +309,7 @@ void tCPReceive() {
 
 				int sock = uuid >> 32;
 
-				//printf("send get result to %i\n", sock);
+				printf("send get result to %i\n", sock);
 
 				send(sock, &TCP_message_std, sizeof(TCPMessageSTD), 0);
 
@@ -584,7 +584,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 					one_b_message.status[0] = 1;
 
-					printf("lock %i on %i fail by %ld\n", (hasher(temp[0])%LOCK_NUM), world_rank, uuid);
+					printf("lock %i on %i fail by %ld because of locked\n", (hasher(temp[0])%LOCK_NUM), world_rank, uuid);
 
 				}
 
@@ -629,8 +629,23 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 							break;
 
 						} else {
-						//success to lock
-							one_b_message.status[i] = 0;
+						//check the locked
+
+							if(!locked[hasher(temp[0])%LOCK_NUM]) {
+								//success to lock
+								locked[hasher(temp[0])%LOCK_NUM] = true;
+								
+								one_b_message.status[i] = 0;
+
+								lock_table[uuid].insert(hasher(temp[0])%LOCK_NUM);
+
+							} else {
+
+								one_b_message.status[0] = 1;
+
+							}
+							
+							latch[hasher(temp[i])%LOCK_NUM].unlock();
 						}
 					}
 				} else {

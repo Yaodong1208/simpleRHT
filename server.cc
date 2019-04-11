@@ -230,10 +230,10 @@ void tCPReceive() {
 					/* communicator = */ MPI_COMM_WORLD, 
 					/* status       = */ MPI_STATUS_IGNORE);
 
-					printf("myrank = %i, recive one_b_message from %i, uuid = %ld\n",world_rank,status.MPI_SOURCE, one_b_message.uuid);
+					//printf("myrank = %i, recive one_b_message from %i, uuid = %ld\n",world_rank,status.MPI_SOURCE, one_b_message.uuid);
 
 					//use oenBMessageProcess to process one_b_message
-					//boost::asio::post(pool, boost::bind(oneBMessageProcess<T>, &one_b_message, status.MPI_SOURCE));
+					boost::asio::post(pool, boost::bind(oneBMessageProcess<T>, &one_b_message, status.MPI_SOURCE));
 
 					break;
 
@@ -602,7 +602,7 @@ void twoBMessageProcess(TwoBMessage* two_b_message){
 		/* communicator = */ MPI_COMM_WORLD
 		);
 
-		printf("send one_b_message from %i, to %i, uuid = %ld", world_rank, source, one_b_message.uuid);
+		//printf("send one_b_message from %i, to %i, uuid = %ld", world_rank, source, one_b_message.uuid);
 
 	}
 

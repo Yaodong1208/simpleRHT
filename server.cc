@@ -504,7 +504,7 @@ void twoBMessageProcess(TwoBMessage* two_b_message){
 		for(auto node = record_table[uuid].part.begin(); node != record_table[uuid].part.end(); node++) {
 			MPI_Send(
 			/* data         = */ &one_a_message, 
-			/* count        = */ sizeof(ONEAMESSAGE), 
+			/* count        = */ sizeof(OneAMessage), 
 			/* datatype     = */ MPI_BYTE, 
 			/* destination  = */ *node,
 			/* tag          = */ ONEAMESSAGE, 
@@ -593,7 +593,7 @@ void twoBMessageProcess(TwoBMessage* two_b_message){
 
 		MPI_Send(
 		/* data         = */ &one_b_message, 
-		/* count        = */ sizeof(ONEBMESSAGE), 
+		/* count        = */ sizeof(OneBMessage<T>), 
 		/* datatype     = */ MPI_BYTE, 
 		/* destination  = */ source,
 		/* tag          = */ ONEBMESSAGE, 

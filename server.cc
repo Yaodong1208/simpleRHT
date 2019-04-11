@@ -522,20 +522,20 @@ void twoBMessageProcess(TwoBMessage* two_b_message){
 
     template<typename T>
 	void phase1b(OneAMessage one_a_message, int source){
-		long uuid = one_a_message->uuid;
+		long uuid = one_a_message.uuid;
 
 		printf("prepare one_b_message from %i, to %i, uuid = %ld\n", world_rank, source, uuid);
 
 		OneBMessage<T> one_b_message;
 
-		one_b_message.uuid = one_a_message->uuid;
+		one_b_message.uuid = one_a_message.uuid;
 
 		string temp[3];
 
-		switch(one_a_message->operation_type) {
+		switch(one_a_message.operation_type) {
 		case GET:
 
-				temp[0] = one_a_message->hash_key[0];
+				temp[0] = one_a_message.hash_key[0];
 
 				latch[hasher(temp[0])%LOCK_NUM].lock_shared();
 
@@ -545,7 +545,7 @@ void twoBMessageProcess(TwoBMessage* two_b_message){
 
 		case PUT:
 
-			temp[0] = one_a_message->hash_key[0];
+			temp[0] = one_a_message.hash_key[0];
 
 			if(!latch[hasher(temp[0])%LOCK_NUM].try_lock()) {
 
@@ -562,9 +562,9 @@ void twoBMessageProcess(TwoBMessage* two_b_message){
 		case MULTIPUT:
 			for(int i = 0; i < 3; i++) {
 
-				temp[i] = one_a_message->hash_key[i];
+				temp[i] = one_a_message.hash_key[i];
 				
-				if(findNode1(one_a_message->hash_key[i]) == world_rank || findNode2(one_a_message->hash_key[i]) == world_rank) {
+				if(findNode1(one_a_message.hash_key[i]) == world_rank || findNode2(one_a_message.hash_key[i]) == world_rank) {
 				//this item is on this server
 
 					auto it = lock_table[uuid].find(hasher(temp[i])%LOCK_NUM);

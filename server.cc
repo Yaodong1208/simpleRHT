@@ -410,6 +410,8 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 		if(record_table[uuid].decision == ABORT) {
 
+			printf("ABORT success by %ld, restart\n", uuid);
+
 			//reset
 			record_table[uuid].decision = COMMIT;
 
@@ -425,6 +427,8 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 			
 
 		} else {
+
+			printf("COMMIT success by %ld\n", uuid);
 
 			//send tcp response
 			TCPMessageSTD tcp_message_std;
@@ -658,6 +662,8 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 		}
 
 		for(auto it = record_table[uuid].part.begin(); it != record_table[uuid].part.end(); it++) {
+
+		printf("decision is %i by %ld, send to %i\n", two_a_message.decision, two_a_message.uuid, *it);
 
 			MPI_Send(
 			/* data         = */ &two_a_message, 

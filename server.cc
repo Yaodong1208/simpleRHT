@@ -28,6 +28,8 @@ using namespace std;
 
 	hash<string> hasher;
 
+	bool locked[LOCK_NUM] = 0;
+
 	boost::asio::thread_pool pool(10);
 
 	//do some config in main then start therads
@@ -563,17 +565,31 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 			temp[0] = one_a_message.hash_key[0];
 
-			if(!latch[(int)(hasher(temp[0])%LOCK_NUM)].try_lock()) {
+			if(latch[(int)(hasher(temp[0])%LOCK_NUM)].try_lock()) {
 
-				one_b_message.status[0] = 1;
+				if(!locked[(int)(hasher(temp[0])%LOCK_NUM)]) {
 
-				printf("lock %i on %i fail by %ld\n", hasher(temp[0])%LOCK_NUM, world_rank, uuid);
+					locked[(int)(hasher(temp[0])%LOCK_NUM)] = true;
+
+					one_b_message.status[0] = 0;
+
+					printf("lock %i on %i success by %ld\n", (int)hasher(temp[0])%LOCK_NUM, world_rank, uuid);
+
+				} else {
+
+					one_b_message.status[0] = 1;
+
+					printf("lock %i on %i fail by %ld\n", (int)hasher(temp[0])%LOCK_NUM, world_rank, uuid);
+
+				}
+
+				latch[(int)(hasher(temp[0])%LOCK_NUM)].unlock();
 
 			} else {
 
-				one_b_message.status[0] = 0;
+				one_b_message.status[0] = 1;
 
-				printf("lock %i on %i success by %ld\n", hasher(temp[0])%LOCK_NUM, world_rank, uuid);
+				printf("lock %i on %i fail by %ld\n", (int)hasher(temp[0])%LOCK_NUM, world_rank, uuid);
 
 				lock_table[uuid].insert((int)(hasher(temp[0])%LOCK_NUM));
 				}
@@ -739,7 +755,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 			printf("lock %i for %ld on %i unlocked\n", *it, uuid, world_rank);
 
-			latch[*it].unlock();
+			locked[*it] = 0;
 
 		}
 

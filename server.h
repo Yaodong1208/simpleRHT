@@ -58,6 +58,8 @@ struct TwoBMessage {
 	int status;
 };
 
+
+
 template <typename T>
 extern void phase1a(long uuid);
 
@@ -120,5 +122,7 @@ extern mutex tcp_lock;
 extern map<long,Record<int>> record_table;
 
 extern hash<string> hasher;
+
+extern bool locked[LOCK_NUM];
 
 #endif

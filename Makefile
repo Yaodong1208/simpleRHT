@@ -1,7 +1,7 @@
 CC := g++
 MPICXX := mpicxx
-CFLAGS  := -g -Wall -I /RHT/boost_1_67_0
-LDFLAGS := -lpthread -L /RHT/boost_1_67_0/stage/lib -lboost_system 
+CFLAGS  := -g -Wall -I /mirror/ub/boost_1_67_0
+LDFLAGS := -lpthread -L /mirror/ub/boost_1_67_0/stage/lib -lboost_system 
 
 
 rht: server client

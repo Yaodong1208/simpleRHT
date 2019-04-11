@@ -524,6 +524,8 @@ void twoBMessageProcess(TwoBMessage* two_b_message){
 	void phase1b(OneAMessage* one_a_message, int source){
 		long uuid = one_a_message->uuid;
 
+		printf("send one_b_message from %i, to %i, uuid = %ld\n", world_rank, source, uuid);
+
 		OneBMessage<T> one_b_message;
 
 		one_b_message.uuid = one_a_message->uuid;
@@ -595,8 +597,8 @@ void twoBMessageProcess(TwoBMessage* two_b_message){
 			}
 		}
 	
-		printf("send one_b_message from %i, to %i, uuid = %ld\n", world_rank, source, one_b_message.uuid);
 		
+
 		MPI_Send(
 		/* data         = */ &one_b_message, 
 		/* count        = */ sizeof(OneBMessage<T>), 

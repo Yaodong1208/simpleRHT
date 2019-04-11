@@ -510,7 +510,7 @@ void twoBMessageProcess(TwoBMessage* two_b_message){
 			/* tag          = */ ONEAMESSAGE, 
 			/* communicator = */ MPI_COMM_WORLD
 			);
-			printf("send one_a_message from %ld, send_node = %i\n", uuid, *node);
+			printf("send one_a_message from %ld, send_node = %i\n", one_a_message.uuid, *node);
 		}
 		
 	}

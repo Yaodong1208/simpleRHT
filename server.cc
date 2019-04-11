@@ -551,7 +551,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 		string temp[3];
 
 		switch(one_a_message.operation_type) {
-		case GET:
+		case GET:{
 
 				temp[0] = one_a_message.hash_key[0];
 
@@ -561,7 +561,10 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 				latch[hasher(temp[0])%LOCK_NUM].unlock_shared();
 
-		case PUT:
+				break;
+		}
+
+		case PUT:{
 
 			temp[0] = one_a_message.hash_key[0];
 
@@ -573,15 +576,15 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 					one_b_message.status[0] = 0;
 
-					printf("lock %i on %i success by %ld\n", (int)hasher(temp[0])%LOCK_NUM, world_rank, uuid);
+					printf("lock %i on %i success by %ld\n", (hasher(temp[0])%LOCK_NUM), world_rank, uuid);
 
-					lock_table[uuid].insert((int)(hasher(temp[0])%LOCK_NUM));
+					lock_table[uuid].insert((hasher(temp[0])%LOCK_NUM));
 
 				} else {
 
 					one_b_message.status[0] = 1;
 
-					printf("lock %i on %i fail by %ld\n", (int)hasher(temp[0])%LOCK_NUM, world_rank, uuid);
+					printf("lock %i on %i fail by %ld\n", (hasher(temp[0])%LOCK_NUM), world_rank, uuid);
 
 				}
 
@@ -595,9 +598,12 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 				printf("lock %i on %i fail by %ld because of try_lock\n", hasher(temp[0])%LOCK_NUM, world_rank, uuid);
 				
 				}
+			break;
+		}
 			
 
-		case MULTIPUT:
+		case MULTIPUT: {
+
 			for(int i = 0; i < 3; i++) {
 
 				temp[i] = one_a_message.hash_key[i];
@@ -634,6 +640,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 				}
 			}
 		}
+	}
 	
 		
 

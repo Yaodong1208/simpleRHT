@@ -4,11 +4,11 @@ using namespace std;
 
 int operation_number;
 
-float put_percent = 0.5;
+float put_percent = 0;
 
-float multiput_percent = 0;
+float multiput_percent = 1;
 
-float get_percent = 0.5;
+float get_percent = 0;
 
 int thread_number = 8;
 

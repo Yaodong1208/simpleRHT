@@ -16,9 +16,7 @@
 #include <netinet/in.h> 
 #include <arpa/inet.h>
 #include <functional> //for std::hash
-#include <boost/asio/thread_pool.hpp>
-#include <boost/asio/post.hpp>
-#include <boost/bind.hpp>
+
 
 using namespace std;
 

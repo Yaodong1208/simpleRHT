@@ -1,6 +1,9 @@
 #ifndef SERVER_H
 #define SERVER_H
 #include "common.h"
+#include <boost/asio/thread_pool.hpp>
+#include <boost/asio/post.hpp>
+#include <boost/bind.hpp>
 #include <mpi.h>
 #define LOCK_NUM 100
 

@@ -103,6 +103,8 @@ extern int get(string hash_key, T* value);
 template <typename T>
 extern void put(string hash_key, T* value);
 
+extern void monitor();
+
 extern map<string,int> hash_table;
 
 extern shared_mutex latch[ LOCK_NUM ];

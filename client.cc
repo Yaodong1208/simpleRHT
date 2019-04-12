@@ -4,11 +4,11 @@ using namespace std;
 
 int operation_number;
 
-float put_percent = 0.5;
+float put_percent = 0.2;
 
-float multiput_percent = 0.5;
+float multiput_percent = 0.2;
 
-float get_percent = 0;
+float get_percent = 0.6;
 
 int thread_number = 8;
 
@@ -35,11 +35,19 @@ static const char alphanum[] =
         "abcdefghijklmnopqrstuvwxyz";
 
 	int main(int argc, char* argv[]){
-		const clock_t begin_time = clock();
+		
 
 		srand(time(0));
 
+		
+
 		operation_number = atoi(argv[1]);
+
+		put_percent = atof(argv[2]);
+
+		get_percent = atof(argv[3]);
+
+		multiput_percent = 1 - put_percent - get_percent;
 
 		for(int i = 0; i < thread_number; i++) {
 			worker[i] =  thread(tCPSend<int>);
@@ -49,7 +57,7 @@ static const char alphanum[] =
 			worker[i].join();
 		}
 		
-		float duration = float( clock () - begin_time ) /  CLOCKS_PER_SEC;
+		
 		
 		cout<<"\n****************metrics****************\n";
 		cout<<"total_process number"<<operation_number<<"\n";
@@ -57,7 +65,7 @@ static const char alphanum[] =
 		cout<<"put_fail number is "<<put_fail<<"\n";
 		cout<<"get_success number is "<<get_success<<"\n";
 		cout<<"get_fail number is "<<get_fail<<"\n";
-		cout<<"duration is "<<duration<<"\n";
+		
 		
 
 	}
@@ -66,6 +74,8 @@ static const char alphanum[] =
 	void tCPSend(){
 		//*****socket config start ****
 		//struct sockaddr_in address; 
+
+
 
 		int sock = 0; 
 
@@ -103,10 +113,11 @@ static const char alphanum[] =
 		//continually send request
 		int message_sent = 0;
 		bool terminate;
+
+		float latency_counter = 0;
+		
 		while(!terminate) {
 
-			
-			
 			TCPMessageSTD request;
 
 			request.is_end = false;
@@ -127,16 +138,16 @@ static const char alphanum[] =
 			}
 			//send message by socket
 
-			TCPRequestInfo<T>* info = ((TCPRequestInfo<T>*)(request.message_text));
-
 			if(request.operation_type == MULTIPUT) {
 
 				//printf("opertion_type = %d, hash_key[2] = %s, hash_value[2] = %i\n", request.operation_type, info->hash_pair[2].hash_key, info->hash_pair[2].hash_value);
 			}
 
 			
-
+			
 			send(sock, &request, sizeof(TCPMessageSTD), 0);
+
+			clock_t begin_time = clock();
 
 			message_sent ++;
 			
@@ -150,6 +161,12 @@ static const char alphanum[] =
 
 			//receive message in a close loop
 			tCPReceive<T>(sock);
+
+			clock_t end_time = clock();
+
+			latency_counter += (end_time - begin_time);
+
+			cout<<"latency on" << this_thread::get_id <<"is"<< latency_counter/CLOCKS_PER_SEC<<"\n";
 		}
 	} 
 

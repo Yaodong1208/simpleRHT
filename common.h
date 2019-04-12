@@ -16,6 +16,7 @@
 #include <netinet/in.h> 
 #include <arpa/inet.h>
 #include <functional> //for std::hash
+#include <atomic>
 
 
 using namespace std;

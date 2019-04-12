@@ -10,7 +10,7 @@ using namespace std;
 	//the first int is lock_no the second is count;
 	map<long, set<int>> lock_table;
 
-	mutex local_lock[8];
+	mutex local_lock[8]; //in this case we use 8, but can more
 
 	mutex remote_lock[UUID_NUM + 1];
 
@@ -32,7 +32,9 @@ using namespace std;
 
 	bool locked[LOCK_NUM] = {0};
 
-	boost::asio::thread_pool pool(10);
+	boost::asio::thread_pool pool;
+
+	atomic_int throughput_counter = 0;
 
 	//do some config in main then start therads
 	int main(){
@@ -49,11 +51,13 @@ using namespace std;
 
 		thread t1(tCPReceive<int>);
 		thread t2(mPIReceive<int>);
+		thread t3(monitor);
 		t1.join();
 		t2.join();
+		t3.join();
 
 	}
-	
+		
 	////////////////////////////////////////
 	////////    TCP Message handler
 	///////////////////////////////////////
@@ -321,6 +325,8 @@ void tCPReceive() {
 
 				record_table[uuid].part.clear();
 
+				throughput_counter ++;
+
 				break;
 			}
 
@@ -359,7 +365,7 @@ void tCPReceive() {
 					}
 	
 				}
-				
+
 				break;
 			}
 
@@ -461,6 +467,8 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 			send(sock, &tcp_message_std, sizeof(TCPMessageSTD), 0);
 
+			throughput_counter++;
+
 		}
 	} 
 		
@@ -536,7 +544,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 			/* tag          = */ ONEAMESSAGE, 
 			/* communicator = */ MPI_COMM_WORLD
 			);
-			int sock = one_a_message.uuid>>32;
+			//int sock = one_a_message.uuid>>32;
 			//printf("send one_a_message from %ld,  sock = %i, send_node = %i\n", one_a_message.uuid,sock, *node);
 		}
 		
@@ -563,7 +571,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 				one_b_message.status[0] = get<T>(temp[0], &one_b_message.hash_value);
 
-				printf("get shared lock %i\n", hasher(temp[0])%LOCK_NUM);
+				printf("get shared lock %ld\n", hasher(temp[0])%LOCK_NUM);
 
 				latch[hasher(temp[0])%LOCK_NUM].unlock_shared();
 
@@ -582,7 +590,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 					one_b_message.status[0] = 0;
 
-					printf("lock %i on %i success by %ld\n", (hasher(temp[0])%LOCK_NUM), world_rank, uuid);
+					printf("lock %ld on %i success by %ld\n", (hasher(temp[0])%LOCK_NUM), world_rank, uuid);
 
 					lock_table[uuid].insert((hasher(temp[0])%LOCK_NUM));
 
@@ -598,19 +606,19 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 					} else*/ {one_b_message.status[0] = 1;
 
-						printf("lock %i on %i fail by %ld because of locked\n", (hasher(temp[0])%LOCK_NUM), world_rank, uuid);
+						printf("lock %ld on %i fail by %ld because of locked\n", (hasher(temp[0])%LOCK_NUM), world_rank, uuid);
 					}
 
 				}
 
 				latch[(hasher(temp[0])%LOCK_NUM)].unlock();
-				printf("unlock trylock %i on %i by %ld\n", hasher(temp[0])%LOCK_NUM, world_rank, uuid);
+				printf("unlock trylock %ld on %i by %ld\n", hasher(temp[0])%LOCK_NUM, world_rank, uuid);
 
 			} else {
 
 				one_b_message.status[0] = 1;
 
-				printf("lock %i on %i fail by %ld because of try_lock\n", hasher(temp[0])%LOCK_NUM, world_rank, uuid);
+				printf("lock %ld on %i fail by %ld because of try_lock\n", hasher(temp[0])%LOCK_NUM, world_rank, uuid);
 				
 				}
 			break;
@@ -844,6 +852,18 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 	}
 
+
+/////////////////////////////////////////
+///////////// monitor
+/////////////////////////////////////////
+void monitor(){
+	while(true) {
+		int prior = throughput_counter.load();
+		usleep(1000);
+		printf("throughput = %i\n", throughput_counter.load() - prior);
+	}
+
+}
 
 
 

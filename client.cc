@@ -4,9 +4,9 @@ using namespace std;
 
 int operation_number;
 
-float put_percent = 0;
+float put_percent = 0.5;
 
-float multiput_percent = 1;
+float multiput_percent = 0.5;
 
 float get_percent = 0;
 

@@ -24,7 +24,7 @@ using namespace std;
 
 	mutex tcp_lock;
 
-	long locked_id[LOCK_NUM] = {0};
+	//long locked_id[LOCK_NUM] = {0};
 
 	map<long,Record<int>> record_table;
 
@@ -319,6 +319,8 @@ void tCPReceive() {
 
 				send(sock, &TCP_message_std, sizeof(TCPMessageSTD), 0);
 
+				record_table[uuid].part.clear();
+
 				break;
 			}
 
@@ -443,7 +445,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 			}
 
 			//restart after a while
-			//usleep(rand()%1000);
+			usleep(1000);
 			phase1a<T>(uuid);
 			
 
@@ -587,17 +589,17 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 					lock_table[uuid].insert((hasher(temp[0])%LOCK_NUM));
 
-					locked_id[hasher(temp[0])%LOCK_NUM] = uuid;
+					//locked_id[hasher(temp[0])%LOCK_NUM] = uuid;
 
 				} else {
 
-					if(locked_id[hasher(temp[0])%LOCK_NUM] == uuid) {
+					/*if(locked_id[hasher(temp[0])%LOCK_NUM] == uuid) {
 
 						one_b_message.status[0] = 0;
 
 						printf("lock %i on %i success by %ld\n", (hasher(temp[0])%LOCK_NUM), world_rank, uuid);
 
-					} else {one_b_message.status[0] = 1;
+					} else*/ {one_b_message.status[0] = 1;
 
 						printf("lock %i on %i fail by %ld because of locked\n", (hasher(temp[0])%LOCK_NUM), world_rank, uuid);
 					}
@@ -797,7 +799,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 			locked[*it] = false;
 
-			locked_id[*it] = 0;
+			//locked_id[*it] = 0;
 
 		}
 

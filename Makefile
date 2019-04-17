@@ -7,7 +7,7 @@ rht: server client
 .PHONY:rht
 
 client: client.o
-	$(CXX) $< -o $@ 
+	$(CXX) $< -o $@ -lpthread
 
 clean:
 	-rm client

@@ -17,6 +17,7 @@
 #include <arpa/inet.h>
 #include <functional> //for std::hash
 #include <atomic>
+#include <fstream>
 
 
 using namespace std;

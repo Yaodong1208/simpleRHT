@@ -27,6 +27,8 @@ int get_fail;
 
 int multiput_fail;
 
+std::ofstream latency_file;
+
 thread worker[8];
 
 static const char alphanum[] =
@@ -166,7 +168,9 @@ static const char alphanum[] =
 
 			latency_counter += (end_time - begin_time);
 
-			cout<<"latency on" << this_thread::get_id <<"is"<< latency_counter/CLOCKS_PER_SEC<<"\n";
+			latency_file.open("latency.txt",std::ios_base::app);
+
+			latency_file<<"latency on" << this_thread::get_id <<"is"<< latency_counter/CLOCKS_PER_SEC<<"\n";
 		}
 	} 
 

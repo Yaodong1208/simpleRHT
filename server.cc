@@ -36,6 +36,8 @@ using namespace std;
 
 	atomic_int throughput_counter = 0;
 
+	std::ofstream throughput_file;
+
 	//do some config in main then start therads
 	int main(){
 		//
@@ -860,7 +862,10 @@ void monitor(){
 	while(true) {
 		int prior = throughput_counter.load();
 		usleep(1000);
-		printf("throughput = %i\n", throughput_counter.load() - prior);
+		if(throughput_counter.load() - prior != 0) {
+			throughput_file.open("throughput.txt", std::ios_base::app);
+			throughput_file << throughput_counter.load() - prior;
+		}
 	}
 
 }

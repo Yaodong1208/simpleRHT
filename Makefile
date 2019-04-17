@@ -12,3 +12,4 @@ client: client.o
 clean:
 	-rm client
 	-rm server
+	-rm client.o

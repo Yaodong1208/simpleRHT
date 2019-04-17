@@ -1,6 +1,6 @@
 description: run on amazon ec2 cluster
 
-Environment: ubuntu 18.4, MPICH, nfs-server/nfs-client, opens
+Environment: ubuntu 18.4, MPICH, nfs-server/nfs-client, openssh
 
 Instruction:
 	run server on master node: mpiexec -n 2 -f machinefile ./server

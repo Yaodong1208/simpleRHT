@@ -352,15 +352,15 @@ void tCPReceive() {
 
 						record_table[uuid].decision = COMMIT;
 
-						
-
 						phase2a<T>(uuid, COMMIT);
+
+						printf("commit %ld\n", uuid);
 
 					} else {
 
 						record_table[uuid].decision = ABORT;
 
-						
+						printf("abort %ld\n", uuid);
 
 						phase2a<T>(uuid, ABORT);
 						

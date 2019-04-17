@@ -26,8 +26,7 @@ using namespace std;
 
 	//long locked_id[LOCK_NUM] = {0};
 
-	map<long,Record<int>> 
-	;
+	map<long,Record<int>> record_table;
 
 	hash<string> hasher;
 

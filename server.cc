@@ -412,9 +412,9 @@ void tCPReceive() {
 						
 							
 					}
-			}
+			}*/
 
-		}*/
+		}
 		local_lock[local_rank].unlock();
 
 	}
@@ -669,8 +669,8 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 					one_b_message.status[i] = 1;
 				}
-			}*/
-		}
+			}
+		}*/
 	}
 	
 		

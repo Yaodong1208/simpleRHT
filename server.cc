@@ -144,7 +144,7 @@ void tCPReceive() {
 
 		uuid += temp;
 		
-		char buffer[BUFFER];
+		char buffer[BUFFER] = {0};
 
 		while(!terminate) {
 
@@ -158,11 +158,12 @@ void tCPReceive() {
 			if(!strcmp(buffer,temp_buffer)) {
 				continue;
 			}else {
+				printf("new read\n");
 				memcpy(buffer, temp_buffer, BUFFER);
 			}
 
-			printf("new read\n");
 			
+
 			TCPMessageSTD* TCP_request = (TCPMessageSTD*)buffer;
 
 			//the first time see TCP_end means this is the last request should be handled

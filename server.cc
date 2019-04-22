@@ -309,6 +309,10 @@ void tCPReceive() {
 
 			case GET: {
 
+				printf("process get message\n");
+
+				fflush(stdout);
+
 				TCPMessageSTD TCP_message_std;
 
 				TCP_message_std.operation_type = GET;
@@ -573,7 +577,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 				one_b_message.status[0] = get<T>(temp[0], &one_b_message.hash_value);
 
-				printf("get shared lock %ld\n", hasher(temp[0])%LOCK_NUM);
+				//printf("get shared lock %ld\n", hasher(temp[0])%LOCK_NUM);
 
 				latch[hasher(temp[0])%LOCK_NUM].unlock_shared();
 

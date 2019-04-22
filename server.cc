@@ -168,6 +168,7 @@ void tCPReceive() {
 				continue;
 			} else {
 				old_order = TCP_request->order;
+				printf("new order\n");
 			}
 
 			//parse TCP_request to record_table

@@ -122,7 +122,7 @@ void tCPReceive() {
 
 			printf("accept new client\n");
 		
-			//boost::asio::post(pool, boost::bind(tCPProcess<T>, new_socket));
+			boost::asio::post(pool, boost::bind(tCPProcess<T>, new_socket));
 
 	}
 }
@@ -149,7 +149,7 @@ void tCPReceive() {
 			char buffer[BUFFER];
 
 			//the TCP_end may be set between last set of terminate and this new round, so check it first
-			
+			printf("going to read\n");
 			read(socket, buffer, BUFFER); 
 
 			TCPMessageSTD* TCP_request = (TCPMessageSTD*)buffer;
@@ -183,8 +183,8 @@ void tCPReceive() {
 				//printf("store hash_key = %s, hash_value = %i\n", record_table[uuid].request[2].hash_key, record_table[uuid].request[2].hash_value);
 			}
 			
-			printf("start a brand new phase1a\n");
-			phase1a<T>(uuid);
+			
+			//phase1a<T>(uuid);
 			
 
 		}

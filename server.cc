@@ -181,6 +181,7 @@ void tCPReceive() {
 				//printf("store hash_key = %s, hash_value = %i\n", record_table[uuid].request[2].hash_key, record_table[uuid].request[2].hash_value);
 			}
 			
+			printf("start a brand new phase1a\n");
 			phase1a<T>(uuid);
 			
 
@@ -228,7 +229,7 @@ void tCPReceive() {
 					/* communicator = */ MPI_COMM_WORLD, 
 					/* status       = */ MPI_STATUS_IGNORE);
 
-					//printf("myrank = %i, recive one_a_message from %ld\n",world_rank, one_a_message.uuid);
+					printf("myrank = %i, recive one_a_message from %ld\n",world_rank, one_a_message.uuid);
 					
 					boost::asio::post(pool, boost::bind(phase1b<T>, one_a_message, status.MPI_SOURCE));
 
@@ -455,6 +456,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 			}
 
 			//restart after a while
+			
 			phase1a<T>(uuid);
 			
 
@@ -578,7 +580,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 				one_b_message.status[0] = get<T>(temp[0], &one_b_message.hash_value);
 
-				printf("get shared lock %ld\n", hasher(temp[0])%LOCK_NUM);
+				//printf("get shared lock %ld\n", hasher(temp[0])%LOCK_NUM);
 
 				latch[hasher(temp[0])%LOCK_NUM].unlock_shared();
 

@@ -255,19 +255,19 @@ void tCPReceive() {
 
 					break;
 
-				case TWOAMESSAGE:
+				/*case TWOAMESSAGE:
 
 					TwoAMessage<T> two_a_message;
 
 					//receive MPI_respponse
 					MPI_Recv(
-					/* data         = */ &two_a_message, 
-					/* count        = */ sizeof(TwoAMessage<T>), 
-					/* datatype     = */ MPI_BYTE, 
-					/* source       = */ status.MPI_SOURCE, 
-					/* tag          = */ status.MPI_TAG, 
-					/* communicator = */ MPI_COMM_WORLD, 
-					/* status       = */ MPI_STATUS_IGNORE);
+					 &two_a_message, 
+					 sizeof(TwoAMessage<T>), 
+					 MPI_BYTE, 
+					 status.MPI_SOURCE, 
+					 status.MPI_TAG, 
+					 MPI_COMM_WORLD, 
+					 MPI_STATUS_IGNORE);
 
 					boost::asio::post(pool, boost::bind(phase2b<T>, two_a_message, status.MPI_SOURCE));
 
@@ -279,15 +279,15 @@ void tCPReceive() {
 
 					//receive MPI_respponse
 					MPI_Recv(
-					/* data         = */ &two_b_message, 
-					/* count        = */ sizeof(TwoAMessage<T>), 
-					/* datatype     = */ MPI_BYTE, 
-					/* source       = */ status.MPI_SOURCE, 
-					/* tag          = */ status.MPI_TAG, 
-					/* communicator = */ MPI_COMM_WORLD, 
-					/* status       = */ MPI_STATUS_IGNORE);
+					 &two_b_message, 
+					 sizeof(TwoAMessage<T>), 
+					 MPI_BYTE, 
+					 status.MPI_SOURCE, 
+					 status.MPI_TAG, 
+					 MPI_COMM_WORLD, 
+					 MPI_STATUS_IGNORE);
 
-					boost::asio::post(pool, boost::bind(twoBMessageProcess<T>, two_b_message));
+					boost::asio::post(pool, boost::bind(twoBMessageProcess<T>, two_b_message));*/
 
 			}
 

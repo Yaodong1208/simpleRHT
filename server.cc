@@ -334,7 +334,7 @@ void tCPReceive() {
 
 
 
-			case PUT: {
+			/*case PUT: {
 				
 
 				record_table[uuid].ack_counter++;
@@ -414,7 +414,7 @@ void tCPReceive() {
 					}
 			}
 
-		}
+		}*/
 		local_lock[local_rank].unlock();
 
 	}
@@ -492,7 +492,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 		switch (one_a_message.operation_type){
 		
-			case MULTIPUT:{
+			/*case MULTIPUT:{
 
 				for(int i = 0; i < 3; i ++) {
 
@@ -505,7 +505,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 				}
 
 				break;
-			}
+			}*/
 
 			case GET:{
 
@@ -523,14 +523,14 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 				break;
 			}
 
-			case PUT: {
+			/*case PUT: {
 
 				memcpy(&one_a_message.hash_key[0], &record_table[uuid].request[0].hash_key, KEY_LEN);
 
 				record_table[uuid].part.insert(findNode1(one_a_message.hash_key[0]));
 
 				record_table[uuid].part.insert(findNode2(one_a_message.hash_key[0]));
-			}
+			}*/
 
 		}
 
@@ -580,7 +580,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 				break;
 		}
 
-		case PUT:{
+		/*case PUT:{
 
 			temp[0] = one_a_message.hash_key[0];
 
@@ -669,7 +669,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 					one_b_message.status[i] = 1;
 				}
-			}
+			}*/
 		}
 	}
 	

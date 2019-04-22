@@ -119,8 +119,10 @@ void tCPReceive() {
 				perror("accept"); 
 				exit(EXIT_FAILURE); 
 			}
+
+			printf("accept new client\n");
 		
-			boost::asio::post(pool, boost::bind(tCPProcess<T>, new_socket));
+			//boost::asio::post(pool, boost::bind(tCPProcess<T>, new_socket));
 
 	}
 }

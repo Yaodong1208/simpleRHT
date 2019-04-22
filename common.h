@@ -55,6 +55,8 @@ struct TCPMessageSTD {
 
 	bool is_end;
 
+	int order;
+
 	long operation_type;
 
 	char message_text[400];

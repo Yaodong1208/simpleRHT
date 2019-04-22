@@ -117,12 +117,16 @@ static const char alphanum[] =
 		bool terminate;
 
 		float latency_counter = 0;
+
+		int order = 0;
 		
 		while(!terminate) {
 
 			TCPMessageSTD request;
 
 			request.is_end = false;
+
+			request.order = order++;
 
 			if(message_sent == operation_number/8 - 1) {
 
@@ -144,6 +148,7 @@ static const char alphanum[] =
 
 				//printf("opertion_type = %d, hash_key[2] = %s, hash_value[2] = %i\n", request.operation_type, info->hash_pair[2].hash_key, info->hash_pair[2].hash_value);
 			}
+
 
 			
 			

@@ -143,28 +143,16 @@ void tCPReceive() {
 		tcp_lock.unlock();
 
 		uuid += temp;
-		
-		char buffer[BUFFER];
-		memset(buffer,0,512);
+
+		int old_order = -1;
 
 		while(!terminate) {
 
-			char temp_buffer[BUFFER];
+			char buffer[BUFFER];
 
 			//the TCP_end may be set between last set of terminate and this new round, so check it first
 			
-			read(socket, temp_buffer, BUFFER); 
-
-			printf("testing...\n");
-
-			if(!strcmp(buffer,temp_buffer)) {
-				continue;
-			}else {
-				printf("new read\n");
-				memcpy(buffer, temp_buffer, BUFFER);
-			}
-
-			
+			read(socket, buffer, BUFFER); 
 
 			TCPMessageSTD* TCP_request = (TCPMessageSTD*)buffer;
 
@@ -174,6 +162,12 @@ void tCPReceive() {
 				//this socket will be closed after respond to client
 				terminate = true;
 
+			}
+
+			if(TCP_request->order == old_order) {
+				continue;
+			} else {
+				old_order = TCP_request->order;
 			}
 
 			//parse TCP_request to record_table

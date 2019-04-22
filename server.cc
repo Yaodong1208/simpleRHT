@@ -248,7 +248,7 @@ void tCPReceive() {
 					/* communicator = */ MPI_COMM_WORLD, 
 					/* status       = */ MPI_STATUS_IGNORE);
 
-					printf("myrank = %i, recive one_b_message from %i, uuid = %ld\n",world_rank,status.MPI_SOURCE, one_b_message.uuid);
+					//printf("myrank = %i, recive one_b_message from %i, uuid = %ld\n",world_rank,status.MPI_SOURCE, one_b_message.uuid);
 
 					//use oenBMessageProcess to process one_b_message
 					boost::asio::post(pool, boost::bind(oneBMessageProcess<T>, one_b_message, status.MPI_SOURCE));
@@ -543,12 +543,12 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 		for(auto node = record_table[uuid].part.begin(); node != record_table[uuid].part.end(); node++) {
 			MPI_Send(
-			/* data         = */ &one_a_message, 
-			/* count        = */ sizeof(OneAMessage), 
-			/* datatype     = */ MPI_BYTE, 
-			/* destination  = */ *node,
-			/* tag          = */ ONEAMESSAGE, 
-			/* communicator = */ MPI_COMM_WORLD
+			&one_a_message, 
+			sizeof(OneAMessage), 
+			MPI_BYTE, 
+			*node,
+			ONEAMESSAGE, 
+			MPI_COMM_WORLD
 			);
 			//int sock = one_a_message.uuid>>32;
 			//printf("send one_a_message from %ld,  sock = %i, send_node = %i\n", one_a_message.uuid,sock, *node);
@@ -680,16 +680,16 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 	
 		
 
-		MPI_Send(
-		/* data         = */ &one_b_message, 
-		/* count        = */ sizeof(OneBMessage<T>), 
-		/* datatype     = */ MPI_BYTE, 
-		/* destination  = */ source,
-		/* tag          = */ ONEBMESSAGE, 
-		/* communicator = */ MPI_COMM_WORLD
-		);
+		/*MPI_Send(
+		&one_b_message, 
+		sizeof(OneBMessage<T>), 
+		MPI_BYTE, 
+		source,
+		ONEBMESSAGE, 
+		MPI_COMM_WORLD
+		);*/
 
-		printf("send 1b message to %i from %ld\n", source, uuid);
+		//printf("send 1b message to %i from %ld\n", source, world_rank);
 
 		fflush(stdout);
 

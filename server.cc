@@ -569,6 +569,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 		string temp[3];
 
 		switch(one_a_message.operation_type) {
+
 		case GET:{
 
 				temp[0] = one_a_message.hash_key[0];
@@ -687,6 +688,11 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 		/* tag          = */ ONEBMESSAGE, 
 		/* communicator = */ MPI_COMM_WORLD
 		);
+
+		printf("send 1b message\n");
+
+		fflush(stdout);
+
 
 		
 

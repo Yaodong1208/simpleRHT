@@ -153,7 +153,10 @@ void tCPReceive() {
 			//the TCP_end may be set between last set of terminate and this new round, so check it first
 			
 
+
 			read(socket, temp_buffer, BUFFER); 
+
+			printf("testing...\n");
 
 			if(!strcmp(buffer,temp_buffer)) {
 				continue;

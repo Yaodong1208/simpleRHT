@@ -144,13 +144,22 @@ void tCPReceive() {
 
 		uuid += temp;
 		
+		char buffer[BUFFER];
+
 		while(!terminate) {
 
-			char buffer[BUFFER];
+			char temp_buffer[BUFFER];
 
 			//the TCP_end may be set between last set of terminate and this new round, so check it first
 			printf("going to read\n");
-			read(socket, buffer, BUFFER); 
+
+			read(socket, temp_buffer, BUFFER); 
+
+			if(!strcmp(buffer,temp_buffer)) {
+				continue;
+			}else {
+				memcpy(buffer, temp_buffer, BUFFER);
+			}
 
 			TCPMessageSTD* TCP_request = (TCPMessageSTD*)buffer;
 
@@ -183,7 +192,7 @@ void tCPReceive() {
 				//printf("store hash_key = %s, hash_value = %i\n", record_table[uuid].request[2].hash_key, record_table[uuid].request[2].hash_value);
 			}
 			
-			
+			   
 			//phase1a<T>(uuid);
 			
 

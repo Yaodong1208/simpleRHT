@@ -33,6 +33,7 @@ struct Record{
 	int send_counter;
 	HashPair<T> request[3];
 	set<int> part;
+	bool finished;
 };
 
 struct OneAMessage {

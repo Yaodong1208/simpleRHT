@@ -297,6 +297,10 @@ void tCPReceive() {
 	template <typename T>
 	void oneBMessageProcess(OneBMessage<T> one_b_message, int source) {
 
+		printf("process 1b message\n");
+
+		fflush(stdout);
+
 		long uuid = one_b_message.uuid;
 				
 		long local_rank = uuid << 32;
@@ -308,10 +312,6 @@ void tCPReceive() {
 		switch (record_table[uuid].operation_type) {
 
 			case GET: {
-
-				printf("process get message\n");
-
-				fflush(stdout);
 
 				TCPMessageSTD TCP_message_std;
 

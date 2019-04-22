@@ -151,7 +151,7 @@ void tCPReceive() {
 			char temp_buffer[BUFFER];
 
 			//the TCP_end may be set between last set of terminate and this new round, so check it first
-			printf("going to read\n");
+			
 
 			read(socket, temp_buffer, BUFFER); 
 
@@ -161,6 +161,8 @@ void tCPReceive() {
 				memcpy(buffer, temp_buffer, BUFFER);
 			}
 
+			printf("new read\n");
+			
 			TCPMessageSTD* TCP_request = (TCPMessageSTD*)buffer;
 
 			//the first time see TCP_end means this is the last request should be handled

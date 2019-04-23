@@ -32,7 +32,7 @@ using namespace std;
 
 	bool locked[LOCK_NUM] = {0};
 
-	boost::asio::thread_pool pool(100);
+	boost::asio::thread_pool pool;
 
 	atomic_int throughput_counter = 0;
 

@@ -169,9 +169,12 @@ void tCPReceive() {
 			} else {
 				old_order = TCP_request->order;
 				printf("new order\n");
+				fflush(stdout);
+
 			}
 
 			printf("order is %i\n",TCP_request->order);
+			fflush(stdout);
 
 			//parse TCP_request to record_table
 

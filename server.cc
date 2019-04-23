@@ -171,6 +171,8 @@ void tCPReceive() {
 				printf("new order\n");
 			}
 
+			printf("order is %i\n",TCP_request->order)
+
 			//parse TCP_request to record_table
 
 			record_table[uuid].operation_type = (OperationType)TCP_request->operation_type;

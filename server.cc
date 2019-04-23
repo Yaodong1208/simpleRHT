@@ -487,10 +487,10 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 			//restart after a while
 
-			int temp = rand() % 1000;
+			int dice = rand() % 4;
 			
-			usleep(temp);
-			
+			usleep(1000 * dice);
+
 			phase1a<T>(uuid);
 			
 

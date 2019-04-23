@@ -130,6 +130,8 @@ void tCPReceive() {
     template<typename T>
 	void tCPProcess(int socket) {
 
+		usleep(100);
+
 		bool terminate = false;
 
 		long uuid = (long)socket << (8 * sizeof(int));

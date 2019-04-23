@@ -40,7 +40,7 @@ using namespace std;
 
 	//do some config in main then start therads
 	int main(){
-		//
+
 		MPI_Init(NULL,NULL);
 		//set world_rank and world_size by mpi_call
 		MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
@@ -198,7 +198,7 @@ void tCPReceive() {
 			}
 			
 			   
-			//phase1a<T>(uuid);
+			phase1a<T>(uuid);
 			
 
 		}
@@ -698,21 +698,16 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 	
 		
 
-		/*MPI_Send(
+		MPI_Send(
 		&one_b_message, 
 		sizeof(OneBMessage<T>), 
 		MPI_BYTE, 
 		source,
 		ONEBMESSAGE, 
 		MPI_COMM_WORLD
-		);*/
+		);
 
-		//printf("send 1b message to %i from %ld\n", source, world_rank);
-
-		fflush(stdout);
-
-
-		
+		//printf("send 1b message to %i from %ld\n", source, world_rank);	
 
 	}
 

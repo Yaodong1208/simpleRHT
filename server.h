@@ -5,7 +5,7 @@
 #include <boost/asio/post.hpp>
 #include <boost/bind.hpp>
 #include <mpi.h>
-#define LOCK_NUM 100
+#define LOCK_NUM 1000
 
 #define UUID_NUM 40
 

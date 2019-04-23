@@ -210,15 +210,27 @@ void tCPReceive() {
 /////////////////////////////////////////////
 ///////////// MPI Message handler
 ////////////////////////////////////////////
-      int findNode1(HashKey key){
+    int findNode1(HashKey key){
 
-		return key[0] % world_size;
+		char temp[KEY_LEN];
+
+		memcpy(temp, &key, KEY_LEN);
+
+		string temp_str = temp;
+
+		return hasher(temp_str) % world_size;
 
 	}
 
 	int findNode2(HashKey key) {
 
-		return (key[0] + 1) % world_size;
+		char temp[KEY_LEN];
+
+		memcpy(temp, &key, KEY_LEN);
+
+		string temp_str = temp;
+
+		return (hasher(temp_str) + 1)% world_size;
 
 	}
 
@@ -566,7 +578,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 			&one_a_message, 
 			sizeof(OneAMessage), 
 			MPI_BYTE, 
-			*node,
+			(T)*node,
 			ONEAMESSAGE, 
 			MPI_COMM_WORLD
 			);

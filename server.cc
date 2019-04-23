@@ -171,7 +171,7 @@ void tCPReceive() {
 				printf("new order\n");
 			}
 
-			printf("order is %i\n",TCP_request->order)
+			printf("order is %i\n",TCP_request->order);
 
 			//parse TCP_request to record_table
 

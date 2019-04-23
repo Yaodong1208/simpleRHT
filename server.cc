@@ -32,7 +32,7 @@ using namespace std;
 
 	bool locked[LOCK_NUM] = {0};
 
-	boost::asio::thread_pool pool(100);
+	boost::asio::thread_pool pool(200);
 
 	atomic_int throughput_counter = 0;
 
@@ -486,6 +486,10 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 			}
 
 			//restart after a while
+
+			int temp = rand() % 1000;
+			
+			usleep(temp);
 			
 			phase1a<T>(uuid);
 			

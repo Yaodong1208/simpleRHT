@@ -895,6 +895,7 @@ void monitor(){
 		if(throughput_counter.load() - prior != 0) {
 			throughput_file.open("throughput.txt", std::ios_base::app);
 			throughput_file << throughput_counter.load() - prior;
+			fflush(throughput_file);
 		}
 	}
 

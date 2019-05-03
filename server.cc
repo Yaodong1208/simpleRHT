@@ -894,7 +894,7 @@ void monitor(){
 		usleep(1000);
 		if(throughput_counter.load() - prior != 0) {
 			throughput_file.open("throughput.txt", std::ios_base::app);
-			throughput_file << throughput_counter.load() - prior;
+			throughput_file << throughput_counter.load() - prior<<"\n";
 			throughput_file.flush();
 		}
 	}

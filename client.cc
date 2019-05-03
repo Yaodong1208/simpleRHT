@@ -176,6 +176,8 @@ static const char alphanum[] =
 			latency_file.open("latency.txt",std::ios_base::app);
 
 			latency_file<<"latency on" << this_thread::get_id <<"is"<< latency_counter/CLOCKS_PER_SEC<<"\n";
+
+			latency_file.flush();
 		}
 	} 
 

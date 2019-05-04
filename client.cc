@@ -32,9 +32,9 @@ std::ofstream latency_file;
 thread worker[8];
 
 static const char alphanum[] =
-        "0123456789"
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        "abcdefghijklmnopqrstuvwxyz";
+        "0123456789";
+        //"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        //"abcdefghijklmnopqrstuvwxyz";
 
 	int main(int argc, char* argv[]){
 		

@@ -817,8 +817,17 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 			case ABORT: 
 			{
+				if(two_a_message.operation_type == PUT) {
 
-				participaint_log<<"agree to abort "<<uuid<<"'s request";
+					participaint_log<<world_rank<<"agree to abort "<<uuid<<"'s put request on key = "<<two_a_message.hash_pair[0].hash_key<<"\n";
+				
+				} else {
+
+					participaint_log<<world_rank<<"agree to abort "<<uuid<<"'s multi-put request on key = "<<two_a_message.hash_pair[0].hash_key
+					
+					<<" "<<two_a_message.hash_pair[1].hash_key<<two_a_message.hash_pair[2].hash_key<<"\n";
+				
+				}
 
 				participaint_log.flush();
 
@@ -828,13 +837,19 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 			
 			case COMMIT:
 
-				{
+				if(two_a_message.operation_type == PUT) {
 
-				participaint_log<<"agree to commit "<<uuid<<"'s request";
+					participaint_log<<world_rank<<"agree to commit "<<uuid<<"'s put request on key = "<<two_a_message.hash_pair[0].hash_key<<"\n";
+				
+				} else {
+
+					participaint_log<<world_rank<<"agree to commit "<<uuid<<"'s multi-put request on key = "<<two_a_message.hash_pair[0].hash_key
+					
+					<<" "<<two_a_message.hash_pair[1].hash_key<<" "<<two_a_message.hash_pair[2].hash_key<<"\n";
+				
+				}
 
 				participaint_log.flush();
-
-				}
 
 				if(two_a_message.operation_type == PUT) {
 
@@ -855,6 +870,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 					}
 				}
 		}
+
 
 		for(auto it = lock_table[uuid].begin(); it != lock_table[uuid].end(); it++) {
 

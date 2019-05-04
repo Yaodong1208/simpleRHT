@@ -38,6 +38,10 @@ using namespace std;
 
 	std::ofstream throughput_file;
 
+	std::ofstream coordinator_log;
+
+	std::ofstream participaint_log;
+
 	//do some config in main then start therads
 	int main(){
 
@@ -576,8 +580,9 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 		record_table[uuid].send_counter = record_table[uuid].part.size();
 		
-
+		coordinator_log.open("coordinator.txt", std::ios_base::app);
 		for(auto node = record_table[uuid].part.begin(); node != record_table[uuid].part.end(); node++) {
+			
 			MPI_Send(
 			&one_a_message, 
 			sizeof(OneAMessage), 
@@ -588,7 +593,9 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 			);
 			//int sock = one_a_message.uuid>>32;
 			//printf("send one_a_message from %ld,  sock = %i, send_node = %i\n", one_a_message.uuid,sock, *node);
+			coordinator_log<<"send one_a_message from " <<one_a_message.uuid<<" to "<< (T)*node;
 		}
+		coordinator_log.close();
 		
 	}
 
@@ -794,6 +801,8 @@ void twoBMessageProcess(TwoBMessage two_b_message){
     template <typename T>
 	void phase2b(TwoAMessage<T> two_a_message, int source) {
 
+		participaint_log.open("participaint.txt", std::ios_base::app);
+
 		TwoBMessage two_b_message;
 
 		two_b_message.uuid = two_a_message.uuid;
@@ -803,14 +812,29 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 		long uuid = two_b_message.uuid;
 
 		string temp[3];
-
+		
 		switch (two_a_message.decision) {
 
-			case ABORT:
+			case ABORT: 
+			{
+
+				participaint_log<<"agree to abort "<<uuid<<"'s request";
+
+				participaint_log.flush();
+
+			}
 
 				break;
 			
 			case COMMIT:
+
+				{
+
+				participaint_log<<"agree to commit "<<uuid<<"'s request";
+
+				participaint_log.flush();
+
+				}
 
 				if(two_a_message.operation_type == PUT) {
 
@@ -860,8 +884,6 @@ void twoBMessageProcess(TwoBMessage two_b_message){
     template <typename T>
 	int get(string hash_key, T* value) {
 
-		
-
 		auto it = hash_table.find(hash_key);
 
 		if(it == hash_table.end()) {
@@ -889,15 +911,18 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 ///////////// monitor
 /////////////////////////////////////////
 void monitor(){
+	throughput_file.open("throughput.txt", std::ios_base::app);
 	while(true) {
 		int prior = throughput_counter.load();
-		usleep(1000);
+		usleep(10000);
 		if(throughput_counter.load() - prior != 0) {
-			throughput_file.open("throughput.txt", std::ios_base::app);
+			
 			throughput_file << throughput_counter.load() - prior<<"\n";
 			throughput_file.flush();
+			
 		}
 	}
+	throughput_file.close();
 
 }
 

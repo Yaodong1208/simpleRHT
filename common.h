@@ -24,7 +24,7 @@ using namespace std;
 
 #define SOCKET_NUM 8
 
-#define KEY_LEN 2
+#define KEY_LEN 3
 
 #define BUFFER 512
 

@@ -869,8 +869,11 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 				
 					}
 				}
+
+				
 		}
 
+		participaint_log.close();
 
 		for(auto it = lock_table[uuid].begin(); it != lock_table[uuid].end(); it++) {
 

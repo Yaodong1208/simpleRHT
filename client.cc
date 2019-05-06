@@ -171,7 +171,7 @@ static const char alphanum[] =
 
 			clock_t end_time = clock();
 
-			latency_counter += (end_time - begin_time);
+			latency_counter = (end_time - begin_time);
 
 			latency_file.open("latency.txt",std::ios_base::app);
 

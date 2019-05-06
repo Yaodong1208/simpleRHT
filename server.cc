@@ -579,10 +579,19 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 		}
 
 		record_table[uuid].send_counter = record_table[uuid].part.size();
+
+		string filename = "coordinator" + to_string(world_rank) + ".txt";
 		
-		coordinator_log.open("coordinator.txt", std::ios_base::app);
+		coordinator_log.open(filename, std::ios_base::app);
 		for(auto node = record_table[uuid].part.begin(); node != record_table[uuid].part.end(); node++) {
-			
+			coordinator_log<<"send one_a_message from " <<one_a_message.uuid<<" to "<< (T)*node<<"operation is "<<one_a_message.operation_type
+			<<"on key "<<one_a_message.hash_key[0];
+			if(one_a_message.operation_type == MULTIPUT) {
+				coordinator_log<<" "<<one_a_message.hash_key[1]<<" "<<one_a_message.hash_key[2]<<"\n";
+			}else {
+				coordinator_log<<"\n";
+			}
+			coordinator_log.flush();
 			MPI_Send(
 			&one_a_message, 
 			sizeof(OneAMessage), 
@@ -593,7 +602,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 			);
 			//int sock = one_a_message.uuid>>32;
 			//printf("send one_a_message from %ld,  sock = %i, send_node = %i\n", one_a_message.uuid,sock, *node);
-			coordinator_log<<"send one_a_message from " <<one_a_message.uuid<<" to "<< (T)*node;
+			
 		}
 		coordinator_log.close();
 		
@@ -615,7 +624,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 		case GET:{
 
-				temp[0] = one_a_message.hash_key[0];
+				temp[f] = one_a_message.hash_key[0];
 
 				latch[hasher(temp[0])%LOCK_NUM].lock_shared();
 
@@ -721,7 +730,24 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 		}
 	}
 	
-		
+	string filename = "participaint" + world_rank + ".txt";
+
+	participaint_log.open(filename, std::ios_base::app);
+
+	participaint_log<<"oneB decision on "<<uuid<<" operation type = "<<one_a_message.operation_type<<"is ";
+	
+	participaint_log<<"hash key = "<<one_a_message.hash_key[0] << "status = "<< one_b_message.status[0]<<"\n";
+
+	if(one_a_message.operation_type == MULTIPUT) {
+
+		participaint_log<<"hash key = "<<one_a_message.hash_key[1] << "status = "<< one_b_message.status[1]<<"\n";
+
+		participaint_log<<"hash key = "<<one_a_message.hash_key[2] << "status = "<< one_b_message.status[2]<<"\n";
+	}
+
+	participaint_log.fulsh();
+
+	participaint_log.close();
 
 		MPI_Send(
 		&one_b_message, 
@@ -751,6 +777,10 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 		two_a_message.operation_type = record_table[uuid].operation_type;
 
 		two_a_message.decision = decision;
+
+		string filename = "coordinator" + to_string(world_rank) + ".txt";
+		
+		coordinator_log.open(filename, std::ios_base::app);
 
 		switch(record_table[uuid].operation_type) {
 
@@ -783,7 +813,20 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 		for(auto it = record_table[uuid].part.begin(); it != record_table[uuid].part.end(); it++) {
 
-		printf("decision is %i by %ld, send to %i\n", two_a_message.decision, two_a_message.uuid, *it);
+		//printf("decision is %i by %ld, send to %i\n", two_a_message.decision, two_a_message.uuid, *it);
+
+		coordinator_log<<"on uuid = "<<uuid<<"operation type = "<<two_a_message.operation_type<<"hash_key = "<<two_a_message.hash_key[0];
+		if(two_a_message.operation_type == MULTIPUT) {
+
+			coordinator_log<<" "<<two_a_message.hash_key[1]<<" "<<two_a_message.hash_key[2];
+
+		}
+		coordinator_log<<" two_a decision is "<< two_a_message.decision<<"\n";
+
+		coordinator_log.flush();
+
+		coordinator_log.close();
+
 
 			MPI_Send(
 			/* data         = */ &two_a_message, 
@@ -801,7 +844,9 @@ void twoBMessageProcess(TwoBMessage two_b_message){
     template <typename T>
 	void phase2b(TwoAMessage<T> two_a_message, int source) {
 
-		participaint_log.open("participaint.txt", std::ios_base::app);
+		string filename = "participaint" + world_rank + ".txt";
+
+		participaint_log.open(filename, std::ios_base::app);
 
 		TwoBMessage two_b_message;
 

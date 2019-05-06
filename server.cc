@@ -624,7 +624,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 		case GET:{
 
-				temp[f] = one_a_message.hash_key[0];
+				temp[0] = one_a_message.hash_key[0];
 
 				latch[hasher(temp[0])%LOCK_NUM].lock_shared();
 
@@ -730,7 +730,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 		}
 	}
 	
-	string filename = "participaint" + world_rank + ".txt";
+	string filename = "participaint" + to_string(world_rank) + ".txt";
 
 	participaint_log.open(filename, std::ios_base::app);
 
@@ -745,7 +745,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 		participaint_log<<"hash key = "<<one_a_message.hash_key[2] << "status = "<< one_b_message.status[2]<<"\n";
 	}
 
-	participaint_log.fulsh();
+	participaint_log.flush();
 
 	participaint_log.close();
 
@@ -815,10 +815,10 @@ void twoBMessageProcess(TwoBMessage two_b_message){
 
 		//printf("decision is %i by %ld, send to %i\n", two_a_message.decision, two_a_message.uuid, *it);
 
-		coordinator_log<<"on uuid = "<<uuid<<"operation type = "<<two_a_message.operation_type<<"hash_key = "<<two_a_message.hash_key[0];
+		coordinator_log<<"on uuid = "<<uuid<<"operation type = "<<two_a_message.operation_type<<"hash_key = "<<two_a_message.hash_pair[0].hash_key;
 		if(two_a_message.operation_type == MULTIPUT) {
 
-			coordinator_log<<" "<<two_a_message.hash_key[1]<<" "<<two_a_message.hash_key[2];
+			coordinator_log<<" "<<two_a_message.hash_pair[1].hash_key<<" "<<two_a_message.hash_pair[2].hash_key;
 
 		}
 		coordinator_log<<" two_a decision is "<< two_a_message.decision<<"\n";
@@ -844,7 +844,7 @@ void twoBMessageProcess(TwoBMessage two_b_message){
     template <typename T>
 	void phase2b(TwoAMessage<T> two_a_message, int source) {
 
-		string filename = "participaint" + world_rank + ".txt";
+		string filename = "participaint" + to_string(world_rank) + ".txt";
 
 		participaint_log.open(filename, std::ios_base::app);
 

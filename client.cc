@@ -31,17 +31,18 @@ std::ofstream latency_file;
 
 thread worker[8];
 
+string filename;
+
 static const char alphanum[] =
         "0123456789";
         //"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         //"abcdefghijklmnopqrstuvwxyz";
 
 	int main(int argc, char* argv[]){
-		
 
+		filename = "latency" + to_string(rand()%100) + ".txt";
+		
 		srand(time(0));
-
-		
 
 		operation_number = atoi(argv[1]);
 
@@ -173,7 +174,9 @@ static const char alphanum[] =
 
 			latency_counter = (end_time - begin_time);
 
-			latency_file.open("latency.txt",std::ios_base::app);
+			
+
+			latency_file.open(filename,std::ios_base::app);
 
 			latency_file<<"latency on" << this_thread::get_id <<"is"<< latency_counter/CLOCKS_PER_SEC<<"\n";
 
